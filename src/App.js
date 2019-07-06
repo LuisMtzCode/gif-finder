@@ -6,7 +6,7 @@ import SearchBar from './components/SearchBar';
 import Gif from './components/Gif';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 
 class App extends React.Component {
   constructor(props){
@@ -15,7 +15,8 @@ class App extends React.Component {
       gifs: [],
       pagination: 0,
       loading: false,
-      value: ''
+      value: '',
+      tab: 1
     }
     this.API_KEY = 'h1yNE9XMwAdDAMPvU53Ohm85ieuai9OB';
     this.LIMIT = 10;
@@ -44,10 +45,21 @@ class App extends React.Component {
 
   requestApi(value, scroll = false){
     const offset = (scroll ? this.state.pagination * this.LIMIT : 0);
+    var url = '';
+    switch (this.state.tab) {
+      case 1: //Search
+          url = `search?api_key=${this.API_KEY}&q=${value}`;
+        break;
+      case 2: //Trending
+          url = `trending?api_key=${this.API_KEY}`;
+        break;
+      default:
+        break;
+    }
     axios({
       cancelToken: this.source.token,
       method: 'GET',
-      url: `https://api.giphy.com/v1/gifs/search?api_key=${this.API_KEY}&q=${value}&offset=${offset}&limit=${this.LIMIT}`,
+      url: `https://api.giphy.com/v1/gifs/${url}&offset=${offset}&limit=${this.LIMIT}`,
     })
     .then(response => {
       const gifs = response.data.data.map(gif => {
@@ -89,13 +101,30 @@ class App extends React.Component {
     }, 500);
   };
 
+  active = evt => {
+    const buttons = document.querySelectorAll('.tabs .tab');
+    buttons.forEach(button => {
+      button.classList.remove('active');
+    });
+    evt.target.className = 'tab active';
+    const tab = parseInt(evt.target.getAttribute('tab'));
+    this.setState({
+      tab,
+      gifs: [],
+    }, () => {
+      if(this.state.tab === 2){
+        this.requestApi('', false);
+      }
+    });
+  };
+
   handleImageLoaded = index => {
-    // const gifs = this.state.gifs;
-    // gifs[index].loaded = true;
-    // this.setState({
-    //   gifs
-    // });
-    // console.log('imageLoaded');
+    const gifs = this.state.gifs;
+    gifs[index].loaded = true;
+    this.setState({
+      gifs
+    });
+    console.log('imageLoaded');
   }
 
   handleImageErrored() {
@@ -107,10 +136,19 @@ class App extends React.Component {
       <React.Fragment>
         <div className="container">
           <h1>Gif Finder</h1>
-          <SearchBar searchGif={this.searchGif} />
+          <div className="tabs">
+            <button className="tab active" tab="1" onClick={evt=>{this.active(evt)}}>Search</button>
+            <button className="tab" tab="2" onClick={evt=>{this.active(evt)}}>Trending</button>
+          </div>
+          {
+            this.state.tab === 1 ?
+            <SearchBar searchGif={this.searchGif} />
+            :
+            ''
+          }
         </div>
         {
-          this.state.loading ? (<div className="loading"><FontAwesomeIcon icon={faSpinner} className="fa-2x fa-spin"/></div>) 
+          this.state.loading ? (<div className="loading"><FontAwesomeIcon icon={faCircleNotch} className="fa-2x fa-spin"/></div>) 
           :
           (
           <div className="masonry">{
