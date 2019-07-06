@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400&display=swap');
+
+body, input{
+    font-family: 'Open Sans', sans-serif;
+}
+
+body{
+  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+}
+
+h1{
+    text-align: center;
+}
+
+.search{
+    width: fit-content;
+    margin: auto;
+    position: relative;
+}
+
+.search-input{
+    margin: auto;
+    width: 40em;
+    height: 4em;
+    border: 1px solid #e0e0e0;
+    border-radius: 3em;
+    padding: 0 1em;
+    transition: 0.9s ease all;
+}
+.search-input:focus {
+  border: 1px solid #999;
+}
+
+.search-icon{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 1em;
+    margin: auto;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+.loading{
+  text-align: center;
+  margin: 1em 0;
+}
+
+/* clearfix */
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+box-sizing: inherit;
+}
+
+/* Grid */
+.masonry {
+    column-count: 4;
+    column-gap: 1em;
+    text-align: center;
+    margin: 1em auto;
+    max-width: 90%;
+    column-gap: 1em;
+  }
+  
+  .item {
+    background-color: #eee;
+    display: inline-block;
+    margin: 0 0 1em;
+    width: 100%;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    border-radius: 3px 3px;
+  }
+  
+  @media only screen and (min-width: 1024px) {
+    .masonry {
+      column-count: 4;
+    }
+  }
+  
+  /* Masonry on medium-sized screens */
+  @media only screen and (max-width: 1023px) and (min-width: 768px) {
+    .masonry {
+      column-count: 3;
+    }
+  }
+  
+  /* Masonry on small screens */
+  @media only screen and (max-width: 767px){
+    .masonry {
+      column-count: 2;
+    }
+  }
+
+  .toggle-base {
+    height: 20px;
+  }
+  
+  .toggle-enter {
+    animation-name: fade-in;
+    animation-duration: 300ms;
+  }
+  .toggle-leave {
+    animation-name: fade-out;
+    animation-duration: 300ms;
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0.0;
+      height: 0px;
+    }
+    to {
+      opacity: 1.0;
+      height: 20px;
+    }
+  }
+  
+  
+  @keyframes fade-out {
+    from {
+      opacity: 1.0;
+      height: 20px;
+    }
+    to {
+      opacity: 0.0;
+      height: 0px;
+    }
+  }
+  
