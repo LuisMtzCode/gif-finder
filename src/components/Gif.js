@@ -1,13 +1,34 @@
 import React from 'react';
+import Skeleton from 'react-loading-skeleton';
 
-const Gif = ({ gif, handleImageLoaded, index }) => {
-    // console.log(index);
-    return  <img className="item" src={gif.url} alt={gif.title}  onLoad={()=>{ handleImageLoaded(index) }}/>
-    // gif.loaded ? 
-    //  (
-    //     <img className="item" src={gif.url} alt={gif.title}  onLoad={()=>{ handleImageLoaded(index) }}/>
-    //  )
-    //  :
-    //  (<h4>No carga todavía</h4>)
+class Gif extends React.Component {
+    constructor(props) {
+        super(props);
+        this.url = this.props.gif.url;
+        this.title = this.props.gif.title;
+        this.state = {
+            loaded: false
+        }
+    }
+    handleImageLoaded(){
+        this.setState({
+            loaded: true
+        });
+        console.log('imageLoaded');
+    }
+
+    handleImageErrored() {
+        this.setState({ imageStatus: "failed to load" });
+    }
+    
+    render() {
+        return <React.Fragment>
+            <img className={(this.state.loaded ? '' : 'hide') + 'item'} src={this.url} alt={this.title} onLoad={() => { this.handleImageLoaded() }} />
+            {
+                !this.state.loaded ? <Skeleton height={150} /> : ''
+            }
+        </React.Fragment>
+
+    }
 }
 export default Gif;
